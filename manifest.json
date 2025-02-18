@@ -1,0 +1,27 @@
+{
+    "manifest_version": 3,
+    "name": "Hugalugi",
+    "version": "1.0",
+    "description": "A simple Chrome extension to enhance browsing experience.",
+    "permissions": ["storage", "tabs", "activeTab"],
+    "host_permissions": ["https://*/*"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup/popup.html",
+      "default_icon": {
+        "16": "icons/logo.png",
+        "48": "icons/logo.png",
+        "128": "icons/logo.png"
+      }
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://*/*"],
+        "js": ["content/content.js"],
+        "css": ["content/content.css"]
+      }
+    ]
+  }
+  

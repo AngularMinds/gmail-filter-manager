@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #222;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .toast span {
+            margin-right: 15px;
+            font-family: Arial, sans-serif;
+        }
+
+        .toast-btn {
+            background: transparent;
+            border: none;
+            color: #aacbff;
+            /* Blue color for buttons */
+            cursor: pointer;
+            border-radius: 4px;
+            margin-left: 10px;
+            margin-top: 0px;
+            padding: 10px;
+            transition: 200ms;
+        }
+
+        .toast-btn:hover {
+            background-color: #363E4F;
+        }
+
+        .toast-close {
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            margin-left: 1rem;
+            border-radius: 50%;
+            padding: 0.4rem;
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .toast-close:hover {
+            background-color: #4D4D50;
+        }
+
+        .toast::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: #7597CE;
+            animation: progress 2s linear forwards;
+        }
+
+        @keyframes progress {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toast">
+        <span>The emails will be permanently banned</span>
+        <button class="toast-btn ok">OK</button>
+        <!-- <button class="toast-btn no-thanks">No, thanks</button> -->
+        <!-- <img src="https://www.svgrepo.com/show/485655/cancel.svg" class="toast-btn toast-close"> -->
+    </div>
+</body>
+
+</html>
