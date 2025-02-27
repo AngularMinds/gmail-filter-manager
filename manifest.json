@@ -6,7 +6,8 @@
     "permissions": ["storage", "tabs", "activeTab"],
     "host_permissions": ["https://*/*"],
     "background": {
-      "service_worker": "background.js"
+      "service_worker": "background.js",
+      "type": "module"
     },
     "action": {
       "default_popup": "popup/popup.html",
@@ -18,10 +19,13 @@
     },
     "content_scripts": [
       {
-        "matches": ["https://*/*"],
+        "matches": ["https://*/*", "http://*/*"],
         "js": ["content/content.js"],
         "css": ["content/content.css"]
       }
-    ]
+    ],
+    "externally_connectable": {
+      "matches": ["http://localhost:5501/*"]
+    }
   }
   

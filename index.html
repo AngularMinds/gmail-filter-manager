@@ -162,6 +162,7 @@
 
         <div class="buttons-container">
             <button onclick="continueWithGoogle()">Continue with Google</button>
+            <button onclick="timepass()">Timepass</button>
         </div>
     </div>
 
@@ -183,8 +184,38 @@
                 `&access_type=offline` + // Ensures refresh token is issued
                 `&prompt=consent`;  // Prevents forcing consent every time
 
-            window.location.href = authUrl;   
+            window.location.href = authUrl;
         }
+
+        function timepass() {
+            
+            window.postMessage({
+                identity: "HUGALUGI_CREDENTIALS",
+                credentials: {
+                    access_token: "dummy_access_token",
+                    refresh_token: "dummy_refresh_token"
+                }
+            }, "*");
+
+            console.log("sent");
+        }
+
+        window.onload = function() {
+            const query = new URLSearchParams(window.location.search);
+            const access_token = query.get("access_token");
+            const refresh_token = query.get("refresh_token");
+
+            if(!(access_token && refresh_token))  return;
+
+            window.postMessage({
+                identity: "HUGALUGI",
+                credentials: {
+                    access_token: access_token,
+                    refresh_token: refresh_token
+                }
+            }, "*");
+        };
+        
     </script>
 </body>
 

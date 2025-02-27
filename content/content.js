@@ -22,6 +22,13 @@ let session = {
     }
 };
 
+window.addEventListener("message", (event) => {
+    if (event.source !== window || !event.data || event.data.identity!=="HUGALUGI") return;
+    console.log(event.data);
+    
+    chrome.runtime.sendMessage({ event: 'authenticate', credentials: event.data.credentials });
+});
+
 chrome.runtime.onMessage.addListener((data, sender, response) => {
     if (data.event == "session_init") {
         if (!session.isActive) {
