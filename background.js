@@ -55,7 +55,7 @@ chrome.runtime.onMessage.addListener((data, sender, response) => {
 
         authService.setCredentials(access_token, refresh_token);
 
-        Promise.all([authService.getAccessToken(),authService.getAccessToken()]).then(function(results) {
+        Promise.all([authService.getAccessToken(),authService.getRefreshToken()]).then(function(results) {
             const [accessToken, refreshToken] = results;
 
             console.log("Access Token:", accessToken);

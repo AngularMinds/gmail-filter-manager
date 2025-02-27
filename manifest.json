@@ -3,7 +3,7 @@
     "name": "Hugalugi",
     "version": "1.0",
     "description": "A simple Chrome extension to enhance browsing experience.",
-    "permissions": ["storage", "tabs", "activeTab"],
+    "permissions": ["cookies", "storage", "tabs", "activeTab"],
     "host_permissions": ["https://*/*"],
     "background": {
       "service_worker": "background.js",
