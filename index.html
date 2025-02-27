@@ -161,13 +161,7 @@
         </div>
 
         <div class="buttons-container">
-            <button onclick="handleGmailPermission()">Grant Gmail Permission</button>
-            <div id="g_id_onload"
-                data-client_id="8013118729-nrosra0b7ni8llaju2sk2ehgrk1i9oi0.apps.googleusercontent.com"
-                data-callback="handleCredentialResponse" data-auto_prompt="false">
-            </div>
-
-            <div onclick='setAuthType("register")' class="g_id_signin" data-type="standard"></div>
+            <button onclick="continueWithGoogle()">Continue with Google</button>
         </div>
     </div>
 
@@ -180,56 +174,16 @@
     <script>
         const GIS_CLIENT_ID = "8013118729-nrosra0b7ni8llaju2sk2ehgrk1i9oi0.apps.googleusercontent.com";
 
-        let authAction = "login";
-        function setAuthType(action) {
-            authAction = action;
-            console.log("Auth Action:", authAction);
-        }
+        function continueWithGoogle() {
+            const authUrl = `https://accounts.google.com/o/oauth2/auth?` +
+                `client_id=${GIS_CLIENT_ID}` +
+                `&redirect_uri=http://localhost:8080/oauth/gmail` +
+                `&response_type=code` + 
+                `&scope=openid email profile https://www.googleapis.com/auth/gmail.settings.basic` +
+                `&access_type=offline` + // Ensures refresh token is issued
+                `&prompt=consent`;  // Prevents forcing consent every time
 
-        function handleCredentialResponse(response) {
-            const token = response.credential;
-
-            if (authAction == 'login')
-                loginWithGoogle(token);
-            else if (authAction == 'register')
-                registerWithGoogle(token);
-            else
-                throw Error("Invalid authAction");
-        }
-
-        function loginWithGoogle(token) {
-            console.log(token);
-            fetch(`http://localhost:8080/auth/google-login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ credential: token })
-            })
-                .then(res => res.json())
-                .then(data => console.log(`User Info:`, data))
-                .catch(err => console.error("Error:", err));
-        }
-
-        function registerWithGoogle(token) {
-            console.log(token);
-            fetch(`http://localhost:8080/auth/google-register`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ credential: token })
-            })
-                .then(res => res.json())
-                .then(data => console.log(`User Info:`, data))
-                .catch(err => console.error("Error:", err));
-        }
-
-        function handleGmailPermission() {
-            const client = google.accounts.oauth2.initCodeClient({
-                client_id: GIS_CLIENT_ID,
-                scope: "openid email profile https://www.googleapis.com/auth/gmail.settings.basic",
-                ux_mode: "redirect",
-                redirect_uri: "http://localhost:8080/oauth/gmail-permission"
-            });
-
-            client.requestCode(); // User is redirected for login & Gmail access
+            window.location.href = authUrl;   
         }
     </script>
 </body>
