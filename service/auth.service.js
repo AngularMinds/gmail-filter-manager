@@ -1,12 +1,19 @@
 
 function setCredentials(access_token, refresh_token) {
+    setAccessToken(access_token);
+    setRefreshToken(refresh_token);
+}
+
+function setAccessToken(access_token) {
     chrome.cookies.set({
         url: "https://localhost:8080",
         name: "hugalugi_access_token",
         value: access_token,
         expirationDate: Math.floor(Date.now() / 1000) + 3600 // 1 hour from now
     });
+}
 
+function setRefreshToken(refresh_token) {
     chrome.cookies.set({
         url: "https://localhost:8080",
         name: "hugalugi_refresh_token",
@@ -15,7 +22,6 @@ function setCredentials(access_token, refresh_token) {
         expirationDate: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30 * 6 // 6 months from now
     });
 }
-
 
 function getAccessToken() {
     return new Promise((resolve, reject) => {
@@ -38,6 +44,8 @@ function getRefreshToken() {
 
 export default {
     setCredentials,
+    setAccessToken,
     getAccessToken,
+    setRefreshToken,
     getRefreshToken
 }
