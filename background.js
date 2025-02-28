@@ -18,7 +18,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         chrome.tabs.sendMessage(tabId, { event: "session_reset" });
 });
 
-chrome.runtime.onMessage.addListener((data, sender, response) => {
+chrome.runtime.onMessage.addListener((data, sender, sendResponse) => {
     if (data.event == 'block_emails') {
 
         let emails = data.emails;
@@ -30,23 +30,23 @@ chrome.runtime.onMessage.addListener((data, sender, response) => {
 
         console.log("The emails are blocked:", emails);
 
-        fetch("http://localhost:8080/filter/create", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                emails: emails,
-                action: action
+        authService.getAccessToken()
+        .then(function(accessToken) {
+            return fetch("http://localhost:8080/filter/create", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+                },
+                body: JSON.stringify({
+                    emails: emails,
+                    action: action
+                })
             })
         })
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-                response({ success: true, data });
-            })
-            .catch((err) => {
-                response({ success: false, err });
-            });
+        .then((res) => res.json())
+        .then((data) => sendResponse({ success: true, data }))
+        .catch((err) => sendResponse({ success: false, err }));
 
         return true;
     }

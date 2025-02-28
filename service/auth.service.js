@@ -25,18 +25,50 @@ function setRefreshToken(refresh_token) {
 
 function getAccessToken() {
     return new Promise((resolve, reject) => {
-        chrome.cookies.get({ url: "https://localhost:8080", name: "hugalugi_access_token" }, (cookie) => {
-            if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
-            else resolve(cookie ? cookie.value : null);
+        chrome.cookies.get({ url: "https://localhost:8080", name: "hugalugi_access_token" }, async (cookie) => {
+            if (chrome.runtime.lastError || !cookie) {
+                try {
+                    const accessToken = await refreshAccessToken();
+                    resolve(accessToken);
+                } catch (error) {
+                    reject(error);
+                }
+            }
+            else
+                resolve(cookie.value);
         });
     });
 }
 
+
+async function refreshAccessToken() {
+    const accessTokenPromise = fetch("http://localhost:8080/oauth/refresh", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+    })
+    .then(res => res.json())
+    .then(data => data.token);
+
+    accessTokenPromise.then(accessToken => {  // Just for logging purpose
+        setAccessToken(accessToken);
+
+        Promise.all([getAccessToken(), getRefreshToken()]).then(([accessToken, refreshToken]) => {
+            console.log("New credentials have been issued issued");
+            console.log("Access Token:", accessToken);
+            console.log("Refresh Token:", refreshToken);
+        });
+    });
+
+    return accessTokenPromise;
+}
+
+
 function getRefreshToken() {
     return new Promise((resolve, reject) => {
         chrome.cookies.get({ url: "https://localhost:8080", name: "hugalugi_refresh_token" }, (cookie) => {
-            if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
-            else resolve(cookie ? cookie.value : null);
+            if (chrome.runtime.lastError || !cookie) reject(chrome.runtime.lastError);
+            else resolve(cookie.value);
         });
     });
 }
@@ -47,5 +79,6 @@ export default {
     setAccessToken,
     getAccessToken,
     setRefreshToken,
-    getRefreshToken
+    getRefreshToken,
+    refreshAccessToken
 }

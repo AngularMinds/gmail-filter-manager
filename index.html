@@ -162,7 +162,7 @@
 
         <div class="buttons-container">
             <button onclick="continueWithGoogle()">Continue with Google</button>
-            <button onclick="timepass()">Timepass</button>
+            <!-- <button onclick="timepass()">Timepass</button> -->
         </div>
     </div>
 
@@ -181,8 +181,8 @@
                 `&redirect_uri=http://localhost:8080/oauth/gmail` +
                 `&response_type=code` + 
                 `&scope=openid email profile https://www.googleapis.com/auth/gmail.settings.basic` +
-                `&access_type=offline` + // Ensures refresh token is issued
-                `&prompt=consent`;  // Prevents forcing consent every time
+                `&access_type=offline` +
+                `&prompt=consent`;
 
             window.location.href = authUrl;
         }
@@ -190,7 +190,7 @@
         function timepass() {
             
             window.postMessage({
-                identity: "HUGALUGI_CREDENTIALS",
+                identity: "HUGALUGI",
                 credentials: {
                     access_token: "dummy_access_token",
                     refresh_token: "dummy_refresh_token"

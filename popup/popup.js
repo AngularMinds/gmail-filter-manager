@@ -6,9 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
     submit_btn.addEventListener("click", function() {
         chrome.tabs.create({ url: "http://localhost:5501" });
 
-        // if (token) {
-        //     window.postMessage({ type: "TOKEN", token }, "*");
-        // }
+        // chrome.runtime.sendMessage({ event: "sample" }, (response) => {
+        //     console.log("Received response:", response);
+        // });
     });
 
 });

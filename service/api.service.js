@@ -17,15 +17,15 @@ const block_emails = function (payload) {
             action: action
         })
     })
-        .then((res) => {
-            return res.json();
-        })
-        .then((data) => {
-            response({ success: true, data });
-        })
-        .catch((err) => {
-            response({ success: false, err });
-        });
+    .then((res) => {
+        return res.json();
+    })
+    .then((data) => {
+        response({ success: true, data });
+    })
+    .catch((err) => {
+        response({ success: false, err });
+    });
 }
 
 export default {

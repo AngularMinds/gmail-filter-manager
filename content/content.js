@@ -53,8 +53,6 @@ const invokeAPI = async function (payload) {
     const loader = Toast.createLoadingToast("API request in progress ...");
     document.body.appendChild(loader);
 
-    // setTimeout(() => { loader.remove(); }, 3000);
-
     chrome.runtime.sendMessage(payload, (response) => {
         loader.remove();
         unselectSelectedEmails();
