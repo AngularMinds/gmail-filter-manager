@@ -1,0 +1,331 @@
+/* ---- Toolbar ---- */
+
+#gfm-toolbar {
+  position: fixed;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #1a1a2e;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#gfm-toolbar.gfm-toolbar-visible {
+  bottom: 24px;
+}
+
+.gfm-toolbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 20px;
+  white-space: nowrap;
+}
+
+.gfm-toolbar-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 16px;
+}
+
+.gfm-account-indicator {
+  color: #7a7a90;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.gfm-account-indicator:empty::before {
+  content: '\00a0';
+}
+
+.gfm-toolbar-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.gfm-toolbar-links a {
+  color: #6a6a80;
+  font-size: 10px;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.gfm-toolbar-links a:hover {
+  color: #b794f6;
+}
+
+.gfm-link-dot {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #4a4a60;
+}
+
+.gfm-selection-count {
+  color: #a0a0b8;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ---- Mode toggle ---- */
+
+.gfm-mode-toggle {
+  display: flex;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.gfm-mode-btn {
+  padding: 5px 12px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #7a7a90;
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.gfm-mode-btn:hover {
+  color: #b0b0c8;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.gfm-mode-btn.active {
+  background: rgba(138, 80, 255, 0.3);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(138, 80, 255, 0.25);
+}
+
+/* ---- Mode toggle tooltips ---- */
+
+.gfm-mode-btn {
+  position: relative;
+}
+
+.gfm-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2a2a40;
+  color: #d0d0e0;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  white-space: pre-line;
+  width: max-content;
+  max-width: 240px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 10001;
+}
+
+.gfm-mode-btn:hover > .gfm-tooltip {
+  opacity: 1;
+}
+
+.gfm-toolbar-options {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gfm-toolbar-check {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #a0a0b8;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.gfm-toolbar-check:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #d0d0e0;
+}
+
+.gfm-toolbar-check:has(input:checked) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.gfm-toolbar-check input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: #8a50ff;
+  cursor: pointer;
+  margin: 0;
+}
+
+.gfm-toolbar-check input[type="checkbox"]:disabled {
+  opacity: 0.3;
+}
+
+/* ---- Label wrap ---- */
+
+.gfm-label-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gfm-label-select {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  color: #d0d0e0;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 4px 6px;
+  max-width: 120px;
+  cursor: pointer;
+  outline: none;
+}
+
+.gfm-label-select:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.gfm-label-select:focus {
+  border-color: #8a50ff;
+}
+
+.gfm-label-select option {
+  background: #1a1a2e;
+  color: #d0d0e0;
+}
+
+/* ---- Divider ---- */
+
+.gfm-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 2px;
+}
+
+/* ---- Create Filter button ---- */
+
+.gfm-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #d0d0e0;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.gfm-btn svg {
+  flex-shrink: 0;
+}
+
+.gfm-btn-filter {
+  background: rgba(138, 80, 255, 0.2);
+  color: #b794f6;
+}
+
+.gfm-btn-filter:hover {
+  background: rgba(138, 80, 255, 0.35);
+  color: #d4bbff;
+}
+
+.gfm-btn-filter:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- Toast ---- */
+
+.gfm-toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #323232;
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  z-index: 10002;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.gfm-toast-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.gfm-toast-error {
+  background: #d93025;
+}
+
+.gfm-toast-info {
+  background: #1a73e8;
+}
+
+/* ---- Toast action button ---- */
+
+.gfm-toast-action {
+  display: inline-block;
+  margin-left: 12px;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.gfm-toast-action:hover {
+  background: rgba(255, 255, 255, 0.35);
+}

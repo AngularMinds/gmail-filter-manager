@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate Icons</title></head>
+<body>
+<p>Right-click each canvas and "Save image as" to save the icons.</p>
+<script>
+[16, 48, 128].forEach(size => {
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  const grad = ctx.createLinearGradient(0, 0, size, size);
+  grad.addColorStop(0, '#1a1a2e');
+  grad.addColorStop(1, '#5b21b6');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.roundRect(0, 0, size, size, size * 0.2);
+  ctx.fill();
+
+  // Filter icon
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = Math.max(1.5, size * 0.06);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  const pad = size * 0.22;
+  const midY = size * 0.5;
+  const topY = size * 0.28;
+  const botX1 = size * 0.42;
+  const botX2 = size * 0.58;
+  const botY = size * 0.75;
+
+  ctx.beginPath();
+  ctx.moveTo(pad, topY);
+  ctx.lineTo(size - pad, topY);
+  ctx.lineTo(botX2, midY);
+  ctx.lineTo(botX2, botY);
+  ctx.lineTo(botX1, botY);
+  ctx.lineTo(botX1, midY);
+  ctx.closePath();
+  ctx.stroke();
+
+  const label = document.createElement('p');
+  label.textContent = `icon${size}.png`;
+  document.body.appendChild(label);
+  document.body.appendChild(canvas);
+});
+</script>
+</body>
+</html>

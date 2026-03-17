@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Gmail Filter Manager",
+  "version": "1.0.0",
+  "description": "Quickly manage Gmail filters - move to labels, mark as read, delete selected emails and create filters",
+  "permissions": [
+    "identity",
+    "storage",
+    "activeTab"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "host_permissions": [
+    "https://www.googleapis.com/*",
+    "https://oauth2.googleapis.com/*"
+  ]
+}
