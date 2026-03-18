@@ -243,6 +243,35 @@ async function getAuthenticatedEmail() {
 
 // ---- Gmail API request ----
 
+const GMAIL_ERROR_REASONS = {
+  notFound: 'Filter not found — it may have been deleted',
+  invalidArgument: 'Invalid filter criteria — check your sender addresses',
+  quotaExceeded: 'Gmail rate limit reached — please wait a moment and try again',
+  authError: 'Authentication expired — please reconnect your account',
+  failedPrecondition: 'Gmail rejected this change — the filter may conflict with an existing one',
+  resourceAlreadyExists: 'A filter with these exact criteria already exists',
+};
+
+function parseGmailError(status, rawText) {
+  try {
+    const json = JSON.parse(rawText);
+    const err = json.error;
+    if (err) {
+      // Check for known reason codes
+      if (err.errors && err.errors.length > 0) {
+        const reason = err.errors[0].reason;
+        if (GMAIL_ERROR_REASONS[reason]) return GMAIL_ERROR_REASONS[reason];
+      }
+      // Fall back to the top-level message
+      if (err.message) return err.message;
+    }
+  } catch (_) {
+    // Not JSON — use raw text if short enough
+  }
+  if (rawText.length <= 120) return rawText;
+  return `Gmail request failed (${status})`;
+}
+
 async function gmailRequest(endpoint, options = {}) {
   const token = await getValidTokenForActiveAccount();
   const url = endpoint.startsWith('http') ? endpoint : `${GMAIL_API}${endpoint}`;
@@ -255,8 +284,9 @@ async function gmailRequest(endpoint, options = {}) {
     }
   });
   if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Gmail API ${res.status}: ${err}`);
+    const rawErr = await res.text();
+    console.error(`[GFM Background] Gmail API ${res.status} on ${endpoint}:`, rawErr);
+    throw new Error(parseGmailError(res.status, rawErr));
   }
   if (res.status === 204) return null;
   return res.json();
@@ -442,8 +472,15 @@ async function deleteFilter(filterId) {
 }
 
 async function updateFilter(filterId, criteria, action) {
-  await deleteFilter(filterId);
-  return createFilter(criteria, action);
+  // Create new filter first so we never lose the old one if creation fails
+  const newFilter = await createFilter(criteria, action);
+  try {
+    await deleteFilter(filterId);
+  } catch (e) {
+    // Old filter couldn't be deleted (maybe already gone) — not critical since new one is in place
+    console.warn('[GFM Background] Could not delete old filter', filterId, e.message);
+  }
+  return newFilter;
 }
 
 function actionsMatch(a, b) {
@@ -460,7 +497,14 @@ function actionsMatch(a, b) {
 }
 
 async function smartCreateFilter(senders, filterAction) {
-  const existingFilters = await getFilters();
+  let existingFilters;
+  try {
+    existingFilters = await getFilters();
+  } catch (e) {
+    console.warn('[GFM Background] Could not fetch existing filters, skipping merge:', e.message);
+    existingFilters = [];
+  }
+
   const newFrom = senders.map(s => s.toLowerCase());
 
   // Find existing filters with the same action
@@ -480,9 +524,18 @@ async function smartCreateFilter(senders, filterAction) {
     const newCriteria = buildFromCriteria(allSenders);
 
     if (newCriteria.length <= FILTER_CHAR_LIMIT) {
-      const result = await updateFilter(matchedFilter.id, { from: newCriteria }, filterAction);
-      await saveFilterGroup(filterAction, matchedFilter.id, result.id, allSenders);
-      return { action: 'updated', filterIds: [result.id], senders: allSenders };
+      try {
+        const result = await updateFilter(matchedFilter.id, { from: newCriteria }, filterAction);
+        await saveFilterGroup(filterAction, matchedFilter.id, result.id, allSenders);
+        return { action: 'updated', filterIds: [result.id], senders: allSenders };
+      } catch (e) {
+        // Merge failed (stale filter, API rejected merged criteria, etc.) — fall back to new filter
+        console.warn('[GFM Background] Update failed, creating new filter instead:', e.message);
+        const criteria = buildFromCriteria(newFrom);
+        const result = await createFilter({ from: criteria }, filterAction);
+        await addToFilterGroup(filterAction, result.id, newFrom);
+        return { action: 'created', filterIds: [result.id], senders: newFrom };
+      }
     } else {
       const overflowCriteria = buildFromCriteria(newFrom);
       const result = await createFilter({ from: overflowCriteria }, filterAction);

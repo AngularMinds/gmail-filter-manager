@@ -380,8 +380,29 @@
     }
   }
 
+  function resetToolbarState() {
+    if (!toolbar) return;
+    const readCheck = toolbar.querySelector('#gfm-opt-read');
+    const archiveCheck = toolbar.querySelector('#gfm-opt-archive');
+    const deleteCheck = toolbar.querySelector('#gfm-opt-delete');
+    const labelCheck = toolbar.querySelector('#gfm-opt-label');
+    const labelSelect = toolbar.querySelector('#gfm-label-select');
+
+    readCheck.checked = true;
+    readCheck.disabled = false;
+    archiveCheck.checked = false;
+    archiveCheck.disabled = false;
+    deleteCheck.checked = false;
+    labelCheck.checked = false;
+    labelCheck.disabled = false;
+    labelSelect.disabled = true;
+    labelSelect.value = '';
+  }
+
   function showToolbar(count) {
+    const wasHidden = !toolbar || !toolbar.classList.contains('gfm-toolbar-visible');
     if (!toolbar) createToolbar();
+    if (wasHidden) resetToolbarState();
     updateToolbarCount();
     toolbar.classList.add('gfm-toolbar-visible');
   }
@@ -533,7 +554,8 @@
         updateVisibleRows(action);
       } catch (e) {
         log('Apply to existing failed:', e);
-        showToast(`${word} filter for ${senders.length} sender(s)`);
+        showToast(`${word} filter for ${senders.length} sender(s), but could not apply to existing emails`, 'info');
+        updateVisibleRows(action);
       }
 
     } catch (err) {

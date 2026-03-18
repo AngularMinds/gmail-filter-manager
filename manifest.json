@@ -1,12 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "Gmail Filter Manager",
+  "name": "Filter Manager for Gmail",
   "version": "1.0.0",
-  "description": "Quickly manage Gmail filters - move to labels, mark as read, delete selected emails and create filters",
+  "description": "Select emails and instantly create Gmail filters — mark as read, archive, delete, or label. Auto-merges senders.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "permissions": [
     "identity",
-    "storage",
-    "activeTab"
+    "storage"
   ],
   "background": {
     "service_worker": "background.js"
