@@ -10,8 +10,10 @@
 4. Create OAuth credentials:
    - Go to APIs & Services > Credentials
    - Click "Create Credentials" > "OAuth client ID"
-   - Choose "Chrome Extension" as the application type
-   - Enter your extension ID (you'll get this after loading the extension once - see step 2)
+   - Choose **"Web Application"** as the application type
+   - Under "Authorized redirect URIs", add your extension's redirect URL:
+     `https://<your-extension-id>.chromiumapp.org/`
+     (Find your extension ID by loading the extension unpacked — see Step 2)
    - Copy the **Client ID**
 5. Configure the OAuth consent screen:
    - Go to APIs & Services > OAuth consent screen
@@ -27,10 +29,9 @@
 
 ## Step 3: Configure the Extension
 
-1. Open `manifest.json`
-2. Replace `YOUR_CLIENT_ID.apps.googleusercontent.com` with your actual OAuth Client ID
-3. Go back to Google Cloud Console > Credentials
-4. Edit your OAuth client ID and add the extension ID from Step 2
+1. Open `background.js`
+2. Replace the `CLIENT_ID` value with your actual OAuth Client ID
+3. The `key` field in `manifest.json` pins the extension ID — update it with your CWS public key if publishing to the Chrome Web Store
 
 ## Step 4: Reload & Authorize
 

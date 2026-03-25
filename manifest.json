@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Filter Manager for Gmail",
-  "version": "1.0.0",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu9J2eWzzYUzS63c5cTE3lV1OSDQOA1fJnPLmvqpWgQNNy0ZwFa5NggUd19mZ2jo/0RTrA9FsH2BzHnyk0sGr803GM2Y0eJYzCOE++AQmq36GHujZbskcizK4q4FG+v6VhTsLfoLcHXmaWSLr2hF1u4VB+k9YUDJk6RT43LLoh+ljSO4QC9SP8lAyxMDsAqC1FWc459ilPLY2qUZrSDIOeVhwhRZyhL5IOFD++GtKXV2p6ebEKsYu/44kTMi8szkFLS2bvGYinHT48SZVKznHg5o1nVtKL3rA3PzVGGIvkJ9WDYvOQMcO/ulp8eoAvkP4UBW1+Mk0ch9FUHLLNKEYowIDAQAB",
+  "version": "1.0.1",
   "description": "Select emails and instantly create Gmail filters — mark as read, archive, delete, or label. Auto-merges senders.",
   "icons": {
     "16": "icons/icon16.png",

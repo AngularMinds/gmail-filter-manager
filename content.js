@@ -591,18 +591,14 @@
     const shouldHide = removeLabels.includes('INBOX') || addLabels.includes('TRASH');
 
     if (shouldHide) {
-      // Archive or Delete — fade out and remove rows
+      // Archive or Delete — fade out, then refresh Gmail to re-sync DOM
       for (const row of rows) {
-        row.style.transition = 'opacity 0.3s ease, max-height 0.3s ease';
+        row.style.transition = 'opacity 0.3s ease';
         row.style.opacity = '0';
-        row.style.maxHeight = row.offsetHeight + 'px';
-        row.style.overflow = 'hidden';
-        setTimeout(() => {
-          row.style.maxHeight = '0';
-          row.style.padding = '0';
-          setTimeout(() => row.remove(), 300);
-        }, 300);
       }
+      setTimeout(() => {
+        location.reload();
+      }, 400);
       log('Hid', rows.length, 'rows (archive/delete)');
     } else if (removeLabels.includes('UNREAD')) {
       // Mark as read — unbold everything in the row
@@ -697,7 +693,6 @@
         clearInterval(checkReady);
         log('Gmail loaded, starting observers');
         startSelectionObserver();
-        showToast('Gmail Filter Manager loaded', 'info');
       }
     }, 1000);
   }

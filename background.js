@@ -1,5 +1,3 @@
-console.log('[GFM Background] Service worker started, redirect URL:', chrome.identity.getRedirectURL());
-
 const GMAIL_API = 'https://www.googleapis.com/gmail/v1/users/me';
 const FILTER_CHAR_LIMIT = 1400;
 
