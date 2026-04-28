@@ -1,8 +1,7 @@
 const GMAIL_API = 'https://www.googleapis.com/gmail/v1/users/me';
 const FILTER_CHAR_LIMIT = 1400;
 
-const CLIENT_ID = '699821877875-2hfmeheqimofm92gvjvhqhck9o3bmvp0.apps.googleusercontent.com';
-const CLIENT_SECRET = 'REMOVED';
+const CLIENT_ID = '699821877875-2qt41prg9l7317b5ol5f31g138o7oudu.apps.googleusercontent.com';
 const SCOPES = [
   'https://www.googleapis.com/auth/gmail.modify',
   'https://www.googleapis.com/auth/gmail.settings.basic',
@@ -72,7 +71,6 @@ async function launchOAuthFlow() {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
       client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
       code,
       code_verifier: codeVerifier,
       grant_type: 'authorization_code',
@@ -94,7 +92,6 @@ async function refreshAccessToken(refreshToken) {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
       client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
       refresh_token: refreshToken,
       grant_type: 'refresh_token'
     })
